@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 
 function App() {
-  const [message, setMessage] = useState('');
+  const [message, setMessage] = useState<string>('');
 
   useEffect(() => {
     fetch('/api/hello')
@@ -11,7 +11,7 @@ function App() {
 
   return (
     <div style={{ padding: 20 }}>
-      <h1>React + Vite + Spring Boot</h1>
+      <h1>React + Vite + TypeScript + Spring Boot</h1>
       <p>API says: {message}</p>
     </div>
   );

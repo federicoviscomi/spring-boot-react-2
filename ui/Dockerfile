@@ -1,13 +1,12 @@
-# Use official Node 20 image
 FROM node:20-alpine
 
 WORKDIR /app
 
-# Copy package files first for caching dependencies
-COPY package.json package-lock.json* ./
+# Install dependencies first for caching
+COPY package*.json ./
 RUN npm install
 
-# Copy source code
+# Copy the rest of the code
 COPY . .
 
 EXPOSE 5173
