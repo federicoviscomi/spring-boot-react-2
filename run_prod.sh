@@ -1,4 +1,4 @@
 #!/bin/bash
 set -x
-docker compose -f docker-compose-prod.yml down -v
-docker compose -f docker-compose-prod.yml up --build
+docker compose --env-file .env.prod -f docker-compose-prod.yml down -v
+docker compose --env-file .env.prod -f docker-compose-prod.yml up --build

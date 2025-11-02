@@ -1,4 +1,19 @@
 services:
+  db:
+    image: postgres:15
+    container_name: postgres-prod
+    ports:
+      - "5432:5432"
+    env_file:
+      - .env.prod
+    volumes:
+      - postgres-data-prod:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "echo \"$(date) - Checking Postgres readiness...\"; pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB} || { echo \"$(date) - Postgres not ready\"; exit 1; }; echo \"$(date) - Postgres is ready\""]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
   api:
     build:
       context: ./api
@@ -6,12 +21,8 @@ services:
     container_name: spring-api-prod
     ports:
       - "8080:8080"
-    environment:
-      - SPRING_PROFILES_ACTIVE=prod
-      # optionally add DB credentials, secrets, etc. using env vars or .env
-      # - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/appdb
-      # - SPRING_DATASOURCE_USERNAME=appuser
-      # - SPRING_DATASOURCE_PASSWORD=securepassword
+    env_file:
+      - .env.prod
     restart: no
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:8080/actuator/health"]
@@ -31,3 +42,6 @@ services:
     ports:
       - "80:80"
     restart: no
+
+volumes:
+  postgres-data-prod:
